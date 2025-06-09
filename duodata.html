@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DuoData - Transforme seus dados em clientes ideais</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 400;
+            line-height: 1.7;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Enhanced Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+        }
+
+        h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800; }
+        h2 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; }
+        h3 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; }
+
+        p {
+            font-size: 1.125rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Animated Background */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: backgroundFloat 20s ease-in-out infinite;
+        }
+
+        .gradient-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/><circle cx="25" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        /* Floating Elements */
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .floating-shape:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 10%;
+            animation-delay: -2s;
+        }
+
+        .floating-shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 15%;
+            animation-delay: -8s;
+        }
+
+        .floating-shape:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            top: 40%;
+            left: 80%;
+            animation-delay: -15s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        /* Enhanced Header */
+        header {
+            padding: 1.2rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-nav {
+            background: var(--primary-gradient);
+            color: white !important;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-nav:hover::before {
+            left: 100%;
+        }
+
+        .cta-nav:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Enhanced Hero Section */
+        .hero {
+            padding: 200px 0 140px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            line-height: 1.1;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            margin-bottom: 3rem;
+            opacity: 0;
+            font-weight: 400;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease 0.7s forwards;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.6;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 1.5rem 3rem;
+            border-radius: 60px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease 0.9s forwards;
+            opacity: 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .hero-cta:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .hero-cta .emoji {
+            font-size: 1.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        /* Enhanced Stats Section */
+        .stats {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f0f8ff 100%);
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(180deg, transparent 0%, rgba(248, 250, 252, 0.5) 100%);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-top: 5rem;
+        }
+
+        .stat-item {
+            padding: 3.5rem 2.5rem;
+            border-radius: 28px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .stat-item::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-item:hover::after {
+            opacity: 1;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .stat-number {
+            font-family: 'Poppins', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+
+        .stat-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .stat-item p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Enhanced Features Section */
+        .features {
+            padding: 140px 0;
+            background: white;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 3.8rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #1a202c 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 3rem;
+            margin-top: 6rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 3.5rem;
+            border-radius: 28px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--primary-gradient);
+            border-radius: 28px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::after {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            border-color: transparent;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        /* Enhanced Demo Section */
+        .demo {
+            padding: 140px 0;
+            background: var(--primary-gradient);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="demo-pattern" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/></pattern></defs><rect width="200" height="200" fill="url(%23demo-pattern)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .demo-preview {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 4rem;
+            margin: 5rem 0;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        /* Significantly Enhanced Dashboard */
+        .powerbi-dashboard {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 24px;
+            padding: 3.5rem;
+            color: var(--text-primary);
+            margin: 3rem 0;
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            max-width: 1200px;
+            margin: 3rem auto;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #f1f5f9;
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            padding: 2rem;
+            border-radius: 16px;
+            margin: -1rem -1rem 3rem -1rem;
+        }
+
+        .dashboard-header h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dashboard-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-dropdown {
+            padding: 0.7rem 1.2rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .filter-dropdown:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .refresh-btn {
+            padding: 0.7rem 1.5rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Enhanced KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .kpi-card {
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .kpi-card:hover::after {
+            opacity: 1;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .kpi-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.8rem;
+            line-height: 1;
+        }
+
+        .kpi-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-trend {
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .kpi-trend.positive {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            color: #166534;
+        }
+
+        .kpi-trend.stable {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            color: #475569;
+        }
+
+        /* Super Enhanced Charts */
+        .powerbi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            margin: 3rem 0;
+        }
+
+        .chart-tile {
+            background: linear-gradient(135deg, #fafbff, #ffffff);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 2px solid #e2e8f0;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .chart-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border-color: #a5b4fc;
+        }
+
+        .chart-tile.wide {
+            grid-column: 1 / -1;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .chart-header h4 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .chart-menu {
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .chart-menu:hover {
+            background: #f1f5f9;
+            color: #667eea;
+        }
+
+        /* Ultra Enhanced Donut Chart */
+        .donut-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .donut-chart {
+            width: 240px;
+            height: 240px;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.1));
+        }
+
+        .donut-center-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            fill: var(--text-primary);
+        }
+
+        .donut-center-label {
+            font-size: 1rem;
+            font-weight: 600;
+            fill: var(--text-secondary);
+        }
+
+        .donut-legend {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 0.8rem;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .legend-item:hover {
+            background: #f8fafc;
+            transform: translateX(5px);
+        }
+
+        .legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Super Enhanced Bar Chart */
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .bar-item:hover {
+            background: #f8fafc;
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .bar-label {
+            min-width: 80px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .bar-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 12px;
+            border-radius: 6px;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: barShine 2s ease-in-out infinite;
+        }
+
+        .bar-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            min-width: 50px;
+        }
+
+        /* Ultra Enhanced Line Chart */
+        .line-chart {
+            position: relative;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .line-svg {
+            width: 100%;
+            height: 180px;
+            filter: drop-shadow(0 4px 15px rgba(0,0,0,0.08));
+        }
+
+        .line-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .peak-indicator {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .peak-badge {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Ultra Enhanced Insights Panel */
+        .insights-panel {
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-top: 3rem;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .panel-header h4 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .panel-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .insight-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .insight-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .insight-item:hover {
+            transform: translateX(10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border-color: #a5b4fc;
+        }
+
+        .insight-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .insight-icon.high {
+            background: linear-gradient(135deg, #fee2e2, #fca5a5);
+            color: #dc2626;
+        }
+
+        .insight-icon.medium {
+            background: linear-gradient(135deg, #ddd6fe, #c4b5fd);
+            color: #7c3aed;
+        }
+
+        .insight-text {
+            flex: 1;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .insight-impact {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            color: #166534;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(22, 101, 52, 0.2);
+        }
+
+        /* Enhanced Pricing Section */
+        .pricing {
+            padding: 140px 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f0f8ff 100%);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 5rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 28px;
+            padding: 4rem 3rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .pricing-card.featured {
+            border-color: #667eea;
+            transform: scale(1.08);
+            box-shadow: 0 25px 60px rgba(102, 126, 234, 0.25);
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MAIS POPULAR';
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-gradient);
+            color: white;
+            padding: 0.6rem 2rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.15);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-10px) scale(1.08);
+        }
+
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .price {
+            font-family: 'Poppins', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 1.5rem 0;
+            line-height: 1;
+        }
+
+        .pricing-card ul {
+            text-align: left;
+            margin: 2.5rem 0;
+            list-style: none;
+        }
+
+        .pricing-card li {
+            padding: 0.8rem 0;
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .pricing-card li:last-child {
+            border-bottom: none;
+        }
+
+        .checkmark {
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .pricing-cta {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .pricing-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Enhanced CTA Section */
+        .cta-section {
+            padding: 140px 0;
+            background: var(--primary-gradient);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="cta-pattern" width="60" height="60" patternUnits="userSpaceOnUse"><circle cx="30" cy="30" r="3" fill="white" opacity="0.1"/></pattern></defs><rect width="300" height="300" fill="url(%23cta-pattern)"/></svg>');
+            opacity: 0.4;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            margin: 2.5rem 0;
+            opacity: 0.95;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            color: white;
+            padding: 1.8rem 3.5rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 60px;
+            text-decoration: none;
+            font-size: 1.3rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            margin: 1.5rem;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        /* Enhanced Footer */
+        footer {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        footer .logo {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        footer p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin: 1rem 0;
+        }
+
+        /* Advanced Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(-20px, -10px) scale(1.05); }
+            50% { transform: translate(20px, -20px) scale(0.95); }
+            75% { transform: translate(-10px, 10px) scale(1.02); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(200%) translateY(200%) rotate(45deg); }
+        }
+
+        @keyframes barShine {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Ultra Responsive Design */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 160px 0 100px;
+            }
+            
+            .hero h1 { 
+                font-size: 2.8rem; 
+                line-height: 1.1;
+            }
+            
+            .hero .subtitle { 
+                font-size: 1.2rem; 
+                margin-bottom: 2.5rem;
+            }
+            
+            .nav-links { 
+                display: none; 
+            }
+            
+            .features-grid, .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .powerbi-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: flex-start;
+            }
+            
+            .donut-legend {
+                grid-template-columns: 1fr;
+            }
+            
+            .insight-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .stats, .features, .demo, .pricing, .cta-section {
+                padding: 80px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .hero-cta {
+                padding: 1.2rem 2rem;
+                font-size: 1rem;
+            }
+            
+            .stat-number {
+                font-size: 3rem;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .powerbi-dashboard {
+                padding: 2rem;
+            }
+            
+            .cta-button {
+                padding: 1.5rem 2.5rem;
+                font-size: 1.1rem;
+                margin: 1rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">DuoData</div>
+            <ul class="nav-links">
+                <li><a href="#features">Recursos</a></li>
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="#pricing">Preços</a></li>
+            </ul>
+            <a href="#cta" class="cta-nav">Teste Grátis</a>
+        </nav>
+    </header>
+
+    <section class="hero gradient-bg">
+        <div class="floating-elements">
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>Transforme Dados em Clientes Ideais</h1>
+                <p class="subtitle">Pare de atirar no escuro! O DuoData usa IA para segmentar seus clientes e otimizar suas campanhas de marketing com precisão cirúrgica.</p>
+                <a href="#demo" class="hero-cta floating">
+                    <span class="emoji">🚀</span>
+                    Ver Demo Gratuita
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <h2 class="section-title">Resultados Comprovados</h2>
+            <p class="section-subtitle">Mais de 500 empresas já transformaram seus dados em resultados extraordinários</p>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">73%</div>
+                    <h3>Redução no CPA</h3>
+                    <p>Média de redução no custo por aquisição dos nossos clientes em apenas 30 dias</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4.2x</div>
+                    <h3>Aumento no ROI</h3>
+                    <p>Retorno sobre investimento em campanhas segmentadas com inteligência artificial</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">89%</div>
+                    <h3>Taxa de Conversão</h3>
+                    <p>Melhoria na conversão com personas bem definidas e estratégias personalizadas</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">15min</div>
+                    <h3>Setup Rápido</h3>
+                    <p>Tempo médio para primeira análise completa e insights acionáveis</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Como Funciona o DuoData</h2>
+            <p class="section-subtitle">Transforme seus dados em insights acionáveis em apenas 6 passos simples</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Upload Inteligente</h3>
+                    <p>Faça upload de suas planilhas CSV ou Excel. Nosso sistema processa automaticamente os dados e identifica padrões ocultos em seus clientes com precisão cirúrgica.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>IA Avançada</h3>
+                    <p>Algoritmos de machine learning (K-Means) analisam seus dados e criam segmentos precisos baseados em comportamento, preferências e perfil demográfico completo.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Personas Detalhadas</h3>
+                    <p>Receba personas completas com perfil demográfico, psicográfico e comportamental. Saiba exatamente com quem você está falando e como abordar cada segmento.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3>Estratégias Prontas</h3>
+                    <p>Para cada segmento, receba recomendações específicas de canais, conteúdo, horários ideais e argumentos de venda mais eficazes para maximizar resultados.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Dashboard Interativo</h3>
+                    <p>Visualize seus segmentos em tempo real com gráficos intuitivos e interativos. Clique e explore os detalhes de cada grupo de clientes com facilidade.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Atualizações Automáticas</h3>
+                    <p>Conforme novos dados chegam, o sistema automaticamente atualiza as personas e ajusta as recomendações de marketing em tempo real.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo" id="demo">
+        <div class="container">
+            <h2 class="section-title">Veja o DuoData em Ação</h2>
+            <p class="section-subtitle">Interface real da plataforma - veja como seus dados se transformam em insights poderosos</p>
+            
+            <div class="demo-preview">
+                <div class="powerbi-dashboard">
+                    <div class="dashboard-header">
+                        <h3>Dashboard DuoData - Análise Completa</h3>
+                        <div class="dashboard-controls">
+                            <select class="filter-dropdown">
+                                <option>Último Mês</option>
+                                <option>Últimos 3 Meses</option>
+                                <option>Último Ano</option>
+                            </select>
+                            <button class="refresh-btn">⟳ Atualizar</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Enhanced KPI Cards -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-value">2,847</div>
+                            <div class="kpi-label">Total de Clientes</div>
+                            <div class="kpi-trend positive">↗ +12.3%</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">4</div>
+                            <div class="kpi-label">Segmentos Ativos</div>
+                            <div class="kpi-trend stable">→ 0%</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">73%</div>
+                            <div class="kpi-label">Redução CPA</div>
+                            <div class="kpi-trend positive">↗ +8.1%</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">R$ 127k</div>
+                            <div class="kpi-label">Economia Mensal</div>
+                            <div class="kpi-trend positive">↗ +23.4%</div>
+                        </div>
+                    </div>
+
+                    <!-- Super Enhanced Charts -->
+                    <div class="powerbi-grid">
+                        <!-- Ultra Enhanced Donut Chart -->
+                        <div class="chart-tile">
+                            <div class="chart-header">
+                                <h4>Distribuição de Segmentos</h4>
+                                <div class="chart-menu">⋯</div>
+                            </div>
+                            <div class="donut-container">
+                                <svg class="donut-chart" viewBox="0 0 240 240">
+                                    <defs>
+                                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                                            <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.1"/>
+                                        </filter>
+                                    </defs>
+                                    <circle cx="120" cy="120" r="70" fill="none" stroke="#f1f5f9" stroke-width="35"/>
+                                    <circle cx="120" cy="120" r="70" fill="none" stroke="#667eea" stroke-width="35" 
+                                            stroke-dasharray="153.86 285.32" stroke-dashoffset="0" transform="rotate(-90 120 120)"
+                                            filter="url(#shadow)"/>
+                                    <circle cx="120" cy="120" r="70" fill="none" stroke="#8b5cf6" stroke-width="35" 
+                                            stroke-dasharray="131.95 285.32" stroke-dashoffset="-153.86" transform="rotate(-90 120 120)"
+                                            filter="url(#shadow)"/>
+                                    <circle cx="120" cy="120" r="70" fill="none" stroke="#a855f7" stroke-width="35" 
+                                            stroke-dasharray="87.96 285.32" stroke-dashoffset="-285.81" transform="rotate(-90 120 120)"
+                                            filter="url(#shadow)"/>
+                                    <circle cx="120" cy="120" r="70" fill="none" stroke="#c084fc" stroke-width="35" 
+                                            stroke-dasharray="65.97 285.32" stroke-dashoffset="-373.77" transform="rotate(-90 120 120)"
+                                            filter="url(#shadow)"/>
+                                    <text x="120" y="115" text-anchor="middle" class="donut-center-text">2,847</text>
+                                    <text x="120" y="135" text-anchor="middle" class="donut-center-label">Total</text>
+                                </svg>
+                                <div class="donut-legend">
+                                    <div class="legend-item">
+                                        <div class="legend-dot" style="background: #667eea;"></div>
+                                        <span><strong>Carreirista Tech</strong><br>996 clientes (35%)</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-dot" style="background: #8b5cf6;"></div>
+                                        <span><strong>Jovem Cultural</strong><br>854 clientes (30%)</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-dot" style="background: #a855f7;"></div>
+                                        <span><strong>Viajante</strong><br>569 clientes (20%)</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-dot" style="background: #c084fc;"></div>
+                                        <span><strong>Desenvolvedor</strong><br>428 clientes (15%)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Super Enhanced Bar Chart -->
+                        <div class="chart-tile">
+                            <div class="chart-header">
+                                <h4>Performance por Canal</h4>
+                                <div class="chart-menu">⋯</div>
+                            </div>
+                            <div class="bar-chart">
+                                <div class="bar-item">
+                                    <div class="bar-label">LinkedIn</div>
+                                    <div class="bar-container">
+                                        <div class="bar-fill" style="width: 85%; background: linear-gradient(135deg, #0077B5, #005885);"></div>
+                                        <span class="bar-value">996</span>
+                                    </div>
+                                </div>
+                                <div class="bar-item">
+                                    <div class="bar-label">TikTok</div>
+                                    <div class="bar-container">
+                                        <div class="bar-fill" style="width: 75%; background: linear-gradient(135deg, #000, #333);"></div>
+                                        <span class="bar-value">854</span>
+                                    </div>
+                                </div>
+                                <div class="bar-item">
+                                    <div class="bar-label">Facebook</div>
+                                    <div class="bar-container">
+                                        <div class="bar-fill" style="width: 50%; background: linear-gradient(135deg, #1877F2, #0d5dbf);"></div>
+                                        <span class="bar-value">569</span>
+                                    </div>
+                                </div>
+                                <div class="bar-item">
+                                    <div class="bar-label">Google</div>
+                                    <div class="bar-container">
+                                        <div class="bar-fill" style="width: 38%; background: linear-gradient(135deg, #4285F4, #2c5aa0);"></div>
+                                        <span class="bar-value">428</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ultra Enhanced Line Chart -->
+                        <div class="chart-tile wide">
+                            <div class="chart-header">
+                                <h4>Tendência de Conversão por Horário</h4>
+                                <div class="chart-menu">⋯</div>
+                            </div>
+                            <div class="line-chart">
+                                <svg viewBox="0 0 400 180" class="line-svg">
+                                    <defs>
+                                        <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.4" />
+                                            <stop offset="100%" style="stop-color:#667eea;stop-opacity:0" />
+                                        </linearGradient>
+                                        <filter id="glow">
+                                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                            <feMerge> 
+                                                <feMergeNode in="coloredBlur"/>
+                                                <feMergeNode in="SourceGraphic"/>
+                                            </feMerge>
+                                        </filter>
+                                    </defs>
+                                    <!-- Grid lines -->
+                                    <!-- Grid lines -->
+                                    <defs>
+                                        <pattern id="grid" width="40" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 40 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="400" height="180" fill="url(#grid)" opacity="0.5"/>
+                                    
+                                    <!-- Data line -->
+                                    <polyline fill="none" stroke="#667eea" stroke-width="4" 
+                                             points="50,140 90,135 130,125 170,110 210,80 250,75 290,85 330,115 370,125"
+                                             filter="url(#glow)"/>
+                                    <!-- Area fill -->
+                                    <polygon fill="url(#lineGradient)" 
+                                            points="50,160 50,140 90,135 130,125 170,110 210,80 250,75 290,85 330,115 370,125 370,160"/>
+                                    <!-- Data points -->
+                                    <circle cx="50" cy="140" r="4" fill="#667eea" stroke="white" stroke-width="2"/>
+                                    <circle cx="90" cy="135" r="4" fill="#667eea" stroke="white" stroke-width="2"/>
+                                    <circle cx="130" cy="125" r="4" fill="#667eea" stroke="white" stroke-width="2"/>
+                                    <circle cx="170" cy="110" r="4" fill="#667eea" stroke="white" stroke-width="2"/>
+                                    <circle cx="210" cy="80" r="4" fill="#667eea" stroke="white" stroke-width="2"/>
+                                    <circle cx="250" cy="75" r="6" fill="#667eea" stroke="white" stroke-width="3" filter="url(#glow)"/>
+                                    <circle cx="290" cy="85" r="4" fill="#667eea" stroke="white" stroke-width="2"/>
+                                    <circle cx="330" cy="115" r="4" fill="#667eea" stroke="white" stroke-width="2"/>
+                                    <circle cx="370" cy="125" r="4" fill="#667eea" stroke="white" stroke-width="2"/>
+                                </svg>
+                                <div class="line-labels">
+                                    <span>6h</span>
+                                    <span>9h</span>
+                                    <span>12h</span>
+                                    <span>15h</span>
+                                    <span>18h</span>
+                                    <span>21h</span>
+                                    <span>0h</span>
+                                    <span>3h</span>
+                                    <span>6h</span>
+                                </div>
+                                <div class="peak-indicator">
+                                    <div class="peak-badge">Pico: 21h - 23h (78% conversão)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ultra Enhanced Insights Panel -->
+                    <div class="insights-panel">
+                        <div class="panel-header">
+                            <h4>🧠 Insights Acionáveis Detectados</h4>
+                            <p>Recomendações baseadas em IA para otimizar suas campanhas</p>
+                        </div>
+                        <div class="insight-cards">
+                            <div class="insight-item">
+                                <div class="insight-icon high">⚠️</div>
+                                <div class="insight-text">
+                                    <strong>Oportunidade de Alto Impacto:</strong> Segmento "Carreirista Tech" tem 47% mais probabilidade de converter no LinkedIn entre 19h-21h. Aumente o budget neste horário.
+                                </div>
+                                <div class="insight-impact">+R$ 34k/mês</div>
+                            </div>
+                            <div class="insight-item">
+                                <div class="insight-icon medium">📱</div>
+                                <div class="insight-text">
+                                    <strong>Canais Subutilizados:</strong> TikTok mostra CPA 23% menor para "Jovem Cultural". Considere realocar 15% do budget do Facebook para TikTok.
+                                </div>
+                                <div class="insight-impact">-18% CPA</div>
+                            </div>
+                            <div class="insight-item">
+                                <div class="insight-icon medium">🎯</div>
+                                <div class="insight-text">
+                                    <strong>Persona Emergente:</strong> Detectado novo micro-segmento: "Freelancers Criativos" (127 clientes). LTV 2.3x maior que média geral.
+                                </div>
+                                <div class="insight-impact">Nova oportunidade</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2 class="section-title">Escolha Seu Plano</h2>
+            <p class="section-subtitle">Comece grátis e escale conforme seus resultados crescem</p>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">Grátis</div>
+                    <ul>
+                        <li><span class="checkmark">✓</span> Até 1.000 registros</li>
+                        <li><span class="checkmark">✓</span> 3 segmentações por mês</li>
+                        <li><span class="checkmark">✓</span> Dashboard básico</li>
+                        <li><span class="checkmark">✓</span> Personas em PDF</li>
+                        <li><span class="checkmark">✓</span> Suporte por email</li>
+                    </ul>
+                    <a href="#cta" class="pricing-cta">Começar Grátis</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <h3>Professional</h3>
+                    <div class="price">R$ 297<span style="font-size: 1.2rem; font-weight: 400;">/mês</span></div>
+                    <ul>
+                        <li><span class="checkmark">✓</span> Até 10.000 registros</li>
+                        <li><span class="checkmark">✓</span> Segmentações ilimitadas</li>
+                        <li><span class="checkmark">✓</span> Dashboard completo + IA</li>
+                        <li><span class="checkmark">✓</span> Personas detalhadas</li>
+                        <li><span class="checkmark">✓</span> Insights acionáveis</li>
+                        <li><span class="checkmark">✓</span> Integração com Google Ads</li>
+                        <li><span class="checkmark">✓</span> Suporte prioritário</li>
+                    </ul>
+                    <a href="#cta" class="pricing-cta">Teste 14 Dias Grátis</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">R$ 997<span style="font-size: 1.2rem; font-weight: 400;">/mês</span></div>
+                    <ul>
+                        <li><span class="checkmark">✓</span> Registros ilimitados</li>
+                        <li><span class="checkmark">✓</span> IA personalizada</li>
+                        <li><span class="checkmark">✓</span> API completa</li>
+                        <li><span class="checkmark">✓</span> Integrações avançadas</li>
+                        <li><span class="checkmark">✓</span> Consultoria estratégica</li>
+                        <li><span class="checkmark">✓</span> Treinamento da equipe</li>
+                        <li><span class="checkmark">✓</span> Suporte 24/7</li>
+                    </ul>
+                    <a href="#cta" class="pricing-cta">Falar com Consultor</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="cta">
+        <div class="container">
+            <h2>Pronto para 4x Seu ROI?</h2>
+            <p>Mais de 500 empresas já descobriram seus clientes ideais. Chegou a sua vez de parar de desperdiçar dinheiro em campanhas mal direcionadas.</p>
+            <a href="https://app.duodata.com.br/signup" class="cta-button">🚀 Começar Agora - 100% Grátis</a>
+            <a href="https://calendly.com/duodata/demo" class="cta-button">📞 Agendar Demo Personalizada</a>
+            <p style="font-size: 1rem; margin-top: 2rem; opacity: 0.8;">
+                ✅ Sem cartão de crédito • ✅ Setup em 15 minutos • ✅ Suporte em português
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="logo">DuoData</div>
+            <p>Transformando dados em clientes ideais desde 2023</p>
+            <p>© 2024 DuoData. Todos os direitos reservados.</p>
+            <p style="font-size: 0.9rem; margin-top: 2rem; opacity: 0.7;">
+                contato@duodata.com.br • (11) 99999-9999 • São Paulo, Brasil
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumber = entry.target.querySelector('.stat-number');
+                    const kpiValue = entry.target.querySelector('.kpi-value');
+                    
+                    if (statNumber) {
+                        animateNumber(statNumber);
+                    }
+                    if (kpiValue) {
+                        animateNumber(kpiValue);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-item, .kpi-card').forEach(item => {
+            observer.observe(item);
+        });
+
+        function animateNumber(element) {
+            const text = element.textContent;
+            const number = text.match(/[\d,]+/);
+            if (number) {
+                const finalNumber = parseInt(number[0].replace(',', ''));
+                const duration = 2000;
+                const steps = 60;
+                const increment = finalNumber / steps;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= finalNumber) {
+                        element.textContent = text;
+                        clearInterval(timer);
+                    } else {
+                        const displayNumber = Math.floor(current);
+                        element.textContent = text.replace(/[\d,]+/, displayNumber.toLocaleString());
+                    }
+                }, duration / steps);
+            }
+        }
+
+        // Interactive dashboard elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate real-time updates
+            const refreshBtn = document.querySelector('.refresh-btn');
+            const kpiCards = document.querySelectorAll('.kpi-card');
+            
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', function() {
+                    this.style.transform = 'rotate(360deg)';
+                    this.textContent = '⟳ Atualizando...';
+                    
+                    setTimeout(() => {
+                        this.style.transform = 'rotate(0deg)';
+                        this.textContent = '⟳ Atualizar';
+                        
+                        // Animate KPI cards
+                        kpiCards.forEach((card, index) => {
+                            setTimeout(() => {
+                                card.style.transform = 'scale(1.05)';
+                                setTimeout(() => {
+                                    card.style.transform = 'scale(1)';
+                                }, 200);
+                            }, index * 100);
+                        });
+                    }, 1000);
+                });
+            }
+
+            // Interactive chart hover effects
+            const chartTiles = document.querySelectorAll('.chart-tile');
+            chartTiles.forEach(tile => {
+                tile.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                
+                tile.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Bar chart animation on scroll
+            const barFills = document.querySelectorAll('.bar-fill');
+            const barObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const width = entry.target.style.width;
+                        entry.target.style.width = '0%';
+                        setTimeout(() => {
+                            entry.target.style.width = width;
+                        }, 500);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            barFills.forEach(bar => {
+                barObserver.observe(bar);
+            });
+        });
+
+        // Add floating animation to elements
+        function addFloatingAnimation() {
+            const floatingElements = document.querySelectorAll('.floating');
+            floatingElements.forEach((element, index) => {
+                element.style.animationDelay = `${index * 0.5}s`;
+            });
+        }
+
+        // Initialize floating animations
+        addFloatingAnimation();
+
+        // Parallax effect for background elements
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.floating-shape');
+            
+            parallaxElements.forEach((element, index) => {
+                const speed = 0.2 + (index * 0.1);
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
